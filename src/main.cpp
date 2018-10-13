@@ -27,12 +27,7 @@ get_fusion(const Region& r){
 bool operator== (const Region& lhs, const Region& rhs){
 	return get_fusion(lhs) == get_fusion(rhs);
 }
-/*
-bool operator==(const Region& lhs, const Region& rhs){
-  return tie(lhs.std_name,lhs.parent_std_name,lhs.names,lhs.population) ==
-  tie(rhs.std_name,rhs.parent_std_name,rhs.names,rhs.population);
-}
-*/
+
 int FindMaxRepetitionCount(const vector<Region>& regions){
 	if (regions.size() == 0) return 0;
 	int result = 1;
