@@ -28,16 +28,26 @@ bool operator== (const Region& lhs, const Region& rhs){
 	return get_fusion(lhs) == get_fusion(rhs);
 }
 
+bool operator< (const Region& lhs, const Region& rhs){
+	return get_fusion(lhs) < get_fusion(rhs);
+}
+
+bool compare(const pair<Region, int>&a, const pair<Region, int>&b)
+{
+   return a.second<b.second;
+}
+
 int FindMaxRepetitionCount(const vector<Region>& regions){
 	if (regions.size() == 0) return 0;
-	int result = 1;
+	map<Region,int> reg_to_count;
 	for(const auto& i:regions){
-		int c = count(regions.begin(),regions.end(),i);
-		if (result < c){
-			result = c;
+		if (reg_to_count.count(i) == 0){
+			reg_to_count[i] = 1;
+		} else {
+			reg_to_count[i]++;
 		}
 	}
-	return result;
+	return max_element(reg_to_count.begin(),reg_to_count.end(),compare)->second;
 };
 
 
