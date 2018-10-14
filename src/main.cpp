@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <map>
 #include <vector>
@@ -7,109 +6,68 @@
 #include <algorithm>
 
 using namespace std;
-
-enum class Lang {
-  DE, FR, IT
+// Перечислимый тип для статуса задачи
+enum class TaskStatus {
+	NEW,          // новая
+	IN_PROGRESS,  // в разработке
+	TESTING,      // на тестировании
+	DONE          // завершена
 };
 
-struct Region {
-  string std_name;
-  string parent_std_name;
-  map<Lang, string> names;
-  int64_t population;
+// Объявляем тип-синоним для map<TaskStatus, int>,
+// позволяющего хранить количество задач каждого статуса
+using TasksInfo = map<TaskStatus, int>;
+
+class TeamTasks {
+public:
+	// Получить статистику по статусам задач конкретного разработчика
+	const TasksInfo& GetPersonTasksInfo(const string& person) const;
+
+	// Добавить новую задачу (в статусе NEW) для конкретного разработчитка
+	void AddNewTask(const string& person);
+
+	// Обновить статусы по данному количеству задач конкретного разработчика,
+	// подробности см. ниже
+	tuple<TasksInfo, TasksInfo> PerformPersonTasks(const string& person,
+			int task_count);
 };
 
-tuple <const string&, const string& ,const map<Lang, string>&, const int64_t&>
-get_fusion(const Region& r){
-	return tie(r.std_name, r.parent_std_name, r.names, r.population);
+// Принимаем словарь по значению, чтобы иметь возможность
+// обращаться к отсутствующим ключам с помощью [] и получать 0,
+// не меняя при этом исходный словарь
+void PrintTasksInfo(TasksInfo tasks_info) {
+	cout << tasks_info[TaskStatus::NEW] << " new tasks" << ", "
+			<< tasks_info[TaskStatus::IN_PROGRESS] << " tasks in progress"
+			<< ", " << tasks_info[TaskStatus::TESTING]
+			<< " tasks are being tested" << ", " << tasks_info[TaskStatus::DONE]
+			<< " tasks are done" << endl;
 }
-
-bool operator== (const Region& lhs, const Region& rhs){
-	return get_fusion(lhs) == get_fusion(rhs);
-}
-
-bool operator< (const Region& lhs, const Region& rhs){
-	return get_fusion(lhs) < get_fusion(rhs);
-}
-
-bool compare(const pair<Region, int>&a, const pair<Region, int>&b)
-{
-   return a.second<b.second;
-}
-
-int FindMaxRepetitionCount(const vector<Region>& regions){
-	if (regions.size() == 0) return 0;
-	map<Region,int> reg_to_count;
-	for(const auto& i:regions){
-		if (reg_to_count.count(i) == 0){
-			reg_to_count[i] = 1;
-		} else {
-			reg_to_count[i]++;
-		}
-	}
-	return max_element(reg_to_count.begin(),reg_to_count.end(),compare)->second;
-};
-
 
 int main() {
-  cout << FindMaxRepetitionCount({
-      {
-          "Moscow",
-          "Russia",
-          {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
-          89
-      }, {
-          "Russia",
-          "Eurasia",
-          {{Lang::DE, "Russland"}, {Lang::FR, "Russie"}, {Lang::IT, "Russia"}},
-          89
-      }, {
-          "Moscow",
-          "Russia",
-          {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
-          89
-      }, {
-          "Moscow",
-          "Russia",
-          {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
-          89
-      }, {
-          "Russia",
-          "Eurasia",
-          {{Lang::DE, "Russland"}, {Lang::FR, "Russie"}, {Lang::IT, "Russia"}},
-          89
-      },
-  }) << endl;
+	TeamTasks tasks;
+	tasks.AddNewTask("Ilia");
+	for (int i = 0; i < 3; ++i) {
+		tasks.AddNewTask("Ivan");
+	}
+	cout << "Ilia's tasks: ";
+	PrintTasksInfo(tasks.GetPersonTasksInfo("Ilia"));
+	cout << "Ivan's tasks: ";
+	PrintTasksInfo(tasks.GetPersonTasksInfo("Ivan"));
 
-  cout << FindMaxRepetitionCount({
-      {
-          "Moscow",
-          "Russia",
-          {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
-          89
-      }, {
-          "Russia",
-          "Eurasia",
-          {{Lang::DE, "Russland"}, {Lang::FR, "Russie"}, {Lang::IT, "Russia"}},
-          89
-      }, {
-          "Moscow",
-          "Russia",
-          {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou deux"}, {Lang::IT, "Mosca"}},
-          89
-      }, {
-          "Moscow",
-          "Toulouse",
-          {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
-          89
-      }, {
-          "Moscow",
-          "Russia",
-          {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
-          31
-      },
-  }) << endl;
+	TasksInfo updated_tasks, untouched_tasks;
 
-  return 0;
+	tie(updated_tasks, untouched_tasks) = tasks.PerformPersonTasks("Ivan", 2);
+	cout << "Updated Ivan's tasks: ";
+	PrintTasksInfo(updated_tasks);
+	cout << "Untouched Ivan's tasks: ";
+	PrintTasksInfo(untouched_tasks);
+
+	tie(updated_tasks, untouched_tasks) = tasks.PerformPersonTasks("Ivan", 2);
+	cout << "Updated Ivan's tasks: ";
+	PrintTasksInfo(updated_tasks);
+	cout << "Untouched Ivan's tasks: ";
+	PrintTasksInfo(untouched_tasks);
+
+	return 0;
 }
 
