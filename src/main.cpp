@@ -8,12 +8,8 @@ int Sum(int x, int y){
 	return x+y;
 }
 string Reverse(string s){
-	unsigned int size = s.size();
-	string result(s);
-	for(unsigned int i = 0; i < size; ++i){
-		result[size-1-i] = s[i];
-	}
-	return result;
+	reverse(s.begin(),s.end());
+	return s;
 }
 void Sort(vector<int>& nums)
 {
