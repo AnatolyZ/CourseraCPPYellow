@@ -92,26 +92,78 @@ public:
 private:
   int fail_count = 0;
 };
-
+/*
 class Rational {
 public:
   // Вы можете вставлять сюда различные реализации,
   // чтобы проверить, что ваши тесты пропускают корректный код
   // и ловят некорректный
 
-  Rational();
+  Rational(){
+	  num = 0;
+	  den = 1;
+  };
   Rational(int numerator, int denominator) {
+	  num = numerator;
+	  den = denominator;
   }
 
   int Numerator() const {
+	  return num;
   }
 
   int Denominator() const {
+	  return den;
   }
+private:
+  int den;
+  int num;
 };
+*/
+void TestDefaultConstructor(){
+	{
+		Rational r;
+		AssertEqual(r.Numerator(),0);
+		AssertEqual(r.Denominator(),1);
+	}
+}
+
+void TestParamConstructor(){
+	{
+		Rational r(2,3);
+		AssertEqual(r.Numerator(),2);
+		AssertEqual(r.Denominator(),3);
+	}
+	{
+		Rational r(4,6);
+		AssertEqual(r.Numerator(),2);
+		AssertEqual(r.Denominator(),3);
+	}
+	{
+		Rational r(-4,-6);
+		AssertEqual(r.Numerator(),2);
+		AssertEqual(r.Denominator(),3);
+	}
+	{
+		Rational r(4,-6);
+		AssertEqual(r.Numerator(),-2);
+		AssertEqual(r.Denominator(),3);
+	}
+	{
+		Rational r(-4,6);
+		AssertEqual(r.Numerator(),-2);
+		AssertEqual(r.Denominator(),3);
+	}
+	{
+		Rational r(0,-6);
+		AssertEqual(r.Numerator(),0);
+		AssertEqual(r.Denominator(),1);
+	}
+}
 
 int main() {
   TestRunner runner;
-  // добавьте сюда свои тесты
+  runner.RunTest(TestDefaultConstructor,"Def");
+  runner.RunTest(TestParamConstructor,"Param");
   return 0;
 }
