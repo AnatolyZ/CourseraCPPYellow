@@ -62,7 +62,7 @@ void AssertEqual(const T& t, const U& u, const string& hint = {}) {
   }
 }
 
-void Assert(bool b, const string& hint) {
+void Assert(bool b, const string& hint = {}) {
   AssertEqual(b, true, hint);
 }
 
@@ -92,15 +92,36 @@ public:
 private:
   int fail_count = 0;
 };
-
+/*
 bool IsPalindrom(const string& str) {
   // Вы можете вставлять сюда различные реализации функции,
   // чтобы проверить, что ваши тесты пропускают корректный код
   // и ловят некорректный
 }
+*/
+void TestIsPalindrom(){
+	Assert(IsPalindrom(""));
+	Assert(IsPalindrom(" "));
+	Assert(!IsPalindrom(" v"));
+	Assert(!IsPalindrom("v "));
+	Assert(IsPalindrom("a"));
+	Assert(IsPalindrom("aba"));
+	Assert(IsPalindrom("abba"));
+	Assert(IsPalindrom("ababa"));
+	Assert(IsPalindrom(" ababa "));
+	Assert(IsPalindrom("abaaba"));
+	Assert(!IsPalindrom("cbaaba"));
+	Assert(!IsPalindrom("abaabc"));
+	Assert(!IsPalindrom("aba abc"));
+	Assert(IsPalindrom("aba aba"));
+	Assert(!IsPalindrom(" aba aba"));
+	Assert(!IsPalindrom("aba aba "));
+	Assert(!IsPalindrom("aba "));
+	Assert(!IsPalindrom(" aba"));
+}
 
 int main() {
   TestRunner runner;
-  // добавьте сюда свои тесты
+  runner.RunTest(TestIsPalindrom,"test");
   return 0;
 }
