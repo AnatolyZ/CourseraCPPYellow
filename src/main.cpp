@@ -13,13 +13,8 @@ vector<T> FindGreaterElements(const set<T>& elements, const T& border) {
 	auto it_border = find_if(begin(elements), end (elements),[border](const T& t) {
 		return t > border;
 	});
-	vector<T> result;
 
-	for (auto i = it_border; i != end(elements); ++i) {
-		result.push_back(*i);
-	}
-	sort(begin(result), end(result));
-	return result;
+	return {it_border,end(elements)};
 }
 
 int main() {
