@@ -1,8 +1,29 @@
 
 #include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-int main() {
+template <typename RandomIt>
+void MergeSort(RandomIt range_begin, RandomIt range_end);
 
-	return 0;
+template <typename RandomIt>
+void MergeSort(RandomIt range_begin, RandomIt range_end){
+	if ((range_end - range_begin) >= 2) {
+		vector<typename RandomIt::value_type> elements(range_begin, range_end);
+		auto half_it = begin(elements) + (elements.size()/2);
+		MergeSort(begin(elements), half_it);
+		MergeSort(half_it, end(elements));
+		merge(begin(elements), half_it, half_it, end(elements),range_begin);
+	}
+}
+
+int main() {
+  vector<int> v = {6, 4, 7, 6, 4, 4, 0, 1};
+  MergeSort(begin(v), end(v));
+  for (int x : v) {
+    cout << x << " ";
+  }
+  cout << endl;
+  return 0;
 }
