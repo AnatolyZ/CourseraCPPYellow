@@ -2,7 +2,8 @@
 
 #include <string>
 #include <iostream>
-#include "assert_.h"
+
+#include "tests.h"
 using namespace std;
 
 class TestRunner {
