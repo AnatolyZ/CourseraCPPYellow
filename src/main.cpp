@@ -9,7 +9,7 @@ void MergeSort(RandomIt range_begin, RandomIt range_end);
 
 template <typename RandomIt>
 void MergeSort(RandomIt range_begin, RandomIt range_end){
-	if ((range_end - range_begin) >= 2) {
+	if ((range_end - range_begin) >= 3) {
 		vector<typename RandomIt::value_type> elements(range_begin, range_end);
 		auto third1_it = begin(elements) + (elements.size()/3);
 		auto third2_it = third1_it + (elements.size()/3);
