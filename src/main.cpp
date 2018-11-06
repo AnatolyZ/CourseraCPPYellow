@@ -8,10 +8,11 @@ using namespace std;
 template<typename RandomIt>
 pair<RandomIt, RandomIt> FindStartsWith(RandomIt range_begin,
 		RandomIt range_end, char prefix) {
-	string s(prefix);
-
-	return equal_range(range_begin, range_end,s);
-
+	string s = " ";
+	s[0] = prefix;
+	return equal_range(range_begin, range_end, s,[](const auto& str1,const auto& str2){
+		return str1[0] < str2[0];
+	});
 }
 
 int main() {
@@ -30,7 +31,7 @@ int main() {
 			<< (p_result.second - begin(sorted_strings)) << endl;
 
 	const auto z_result = FindStartsWith(begin(sorted_strings),
-			end(sorted_strings), 'a');
+			end(sorted_strings), 'z');
 	cout << (z_result.first - begin(sorted_strings)) << " "
 			<< (z_result.second - begin(sorted_strings)) << endl;
 
