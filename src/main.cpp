@@ -1,8 +1,23 @@
-
 #include <iostream>
+
 using namespace std;
 
-int main() {
+class Animal {
+public:
+	Animal(const string& n) :
+			Name(n) {
+	}
 
-	return 0;
-}
+	const string Name;
+};
+
+class Dog: public Animal {
+public:
+	Dog(const string& n) :
+			Animal(n) {
+	}
+
+	void Bark() {
+		cout << Name << " barks: woof!" << endl;
+	}
+};
